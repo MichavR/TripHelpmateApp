@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Add activities to trip {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Add activities to trip</h2>
+        <p>from {{ trip.origin }} to {{ trip.destination }}</p>
+    <form class="mid-form" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}<br>
+    <input class="w3-button w3-dark-grey" type="submit" value="Add">
+    </form>
+        <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'add-activity' %}"'>Add new activity</button>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trip-activities-list' trip.pk %}"'>Back</button>
+    </center>
+{% endblock %}

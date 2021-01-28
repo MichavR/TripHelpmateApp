@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Contact us {% endblock %}
+
+{% block content %}
+    <center>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}<br>
+
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+        <div class="g-recaptcha" data-sitekey={{ data_site_key }}></div>
+
+        <input class="w3-button w3-dark-grey" type="submit" value="Send">
+        <button class="w3-button w3-dark-grey" onclick='goBack()'>Back</button>
+    </form>
+    </center>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}

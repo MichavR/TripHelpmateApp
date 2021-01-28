@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Luggage {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Saved luggage:</h2>
+    <p>Trip from {{ trips.origin }} to {{ trips.destination }}</p>
+    <table class="tables">
+        <th>Item name</th>
+        <th>Quantity</th>
+        <th>Already packed</th>
+        <th>Options</th>
+    {% for i in items %}
+        <colgroup>
+            <col>
+        <tr>
+            <td>{{ i.item.name }}</td>
+            <td>{{ i.quantity }}</td>
+            <td>{{ i.packed }}</td>
+            <td><a href="{% url 'item-to-trip-update' i.pk %}">Edit</a> | <a href="{% url 'itemtrip-delete' i.pk %}">Delete</a></td>
+        </tr>
+        </colgroup>
+    {% endfor %}
+    </table><br>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'add-item-trip' trips.pk %}"'>Add items</button>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trips-list' %}"'>Back</button>
+    </center>
+{% endblock %}

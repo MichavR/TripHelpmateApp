@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Your activities {% endblock %}
+
+{% block content %}
+    <center>
+    <h3>Your saved activities:</h3>
+    <table>
+        <th>Activity</th>
+        <th>Options</th>
+    {% for act in activities %}
+        <tr><td>{{ act.activity }}</td>
+            <td><a href="{% url 'activity-update' act.pk %}">Edit</a> | <a href="{% url 'activity-delete' act.pk %}">Delete</a></tr>
+    {% endfor %}
+    </table><br>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'add-activity' %}"'>Add more activities</button>
+    <button class="w3-button w3-dark-grey" onclick='goBack()'>Back</button>
+    </center>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}

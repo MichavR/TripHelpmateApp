@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Delete trip {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Confirm deletion</h2>
+    <form class="mid-form" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete trip from "{{ trip.origin }} to {{ trip.destination }}"?</p>
+        <input class="w3-button w3-dark-grey" type="submit" value="Confirm">
+    </form>
+        <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trips-list' %}"'>Back</button>
+    </center>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Trips {% endblock %}
+
+{% block content %}
+    <center><h2>Your saved trips:</h2>
+    <table>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Manage</th>
+        <th>Options</th>
+    {% for trip in trips %}
+        <tr><td>{{ trip.origin }}</td>
+            <td>{{ trip.destination }}</td><td><a href="{% url 'trip-items-list' trip.pk %}">Luggage</a> | <a href="{% url 'trip-activities-list' trip.pk %}">Plan</a></td>
+            <td><a href="{% url 'trip-update' trip.pk %}">Edit</a> | <a href="{% url 'trip-delete' trip.pk %}">Delete</a></tr></td>
+
+    {% endfor %}
+    </table><br>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'index' %}"'>Add trips</button>
+    </center>
+{% endblock %}

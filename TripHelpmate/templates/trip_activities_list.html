@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Trip plan {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Plan for trip from {{ trips.origin }} to {{ trips.destination }}</h2>
+    <table>
+        <th>Activity</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Done</th>
+        <th>Options</th>
+    {% for a in activities %}
+        <tr>
+            <td>{{ a.activity.activity }}</td>
+            <td>{{ a.date }}</td>
+            <td>{{ a.time }}</td>
+            <td>{{ a.done }}</td>
+            <td><a href="{% url 'activities-to-trip-update' a.pk %}">Edit</a> | <a href="{% url 'activitytrip-delete' a.pk %}">Delete</a></td>
+        </tr>
+    {% endfor %}
+    </table><br>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'add-activity-trip' trips.pk %}"'>Add activity</button>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trips-list' %}"'>Back</button>
+    </center>
+{% endblock %}

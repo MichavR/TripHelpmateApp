@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Update trip {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Edit trip</h2>
+        <p>from {{ trip.origin }} to {{ trip.destination }}</p>
+
+        <form class="mid-form" action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+
+        <table style="display: none">
+            {{ view.formset.empty_form }}
+        </table>
+
+        <table>
+            {{ view.formset }}
+        </table><br>
+
+        <input class="w3-button w3-dark-grey" type="submit" name="trip_update" value="Update">
+    </form>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trips-list' %}"'>Back</button>
+
+    </center>
+{% endblock %}
+
+{% block footer %}
+
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
+{% endblock %}

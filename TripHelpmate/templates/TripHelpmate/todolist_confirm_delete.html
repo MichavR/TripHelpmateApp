@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Delete activity {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Confirm deletion</h2>
+    <form class="mid-form" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ todolist.activity }}"?</p>
+        <input class="w3-button w3-dark-grey" type="submit" value="Confirm">
+    </form>
+        <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'activities-list' %}"'>Decline</button>
+    </center>
+{% endblock %}

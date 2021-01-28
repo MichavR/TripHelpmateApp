@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Delete item from luggage {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Confirm deletion</h2>
+    <form class="mid-form" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete {{ itemtrip.item.name }} from trip: {{ itemtrip.trip.origin }} to {{ itemtrip.trip.destination }}?</p>
+        <input class="w3-button w3-dark-grey" type="submit" value="Delete">
+    </form>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trip-items-list' itemtrip.trip.pk %}"'>Decline</button>
+    </center>
+{% endblock %}

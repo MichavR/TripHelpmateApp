@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | Your items {% endblock %}
+
+{% block content %}
+    <h2>Your saved items:</h2>
+    <table>
+        <th>Item name</th>
+        <th>Options</th>
+    {% for item in items %}
+        <tr><td>{{ item.name }}</td> <td><a href="{% url 'item-update' item.pk %}">Edit</a> | <a href="{% url 'item-delete' item.pk %}">Delete</a></tr>
+    {% endfor %}
+    </table>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'add-item' %}"'>Add more items</button>
+{% endblock %}

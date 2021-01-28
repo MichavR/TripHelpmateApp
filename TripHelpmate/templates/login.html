@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Log In {% endblock %}
+
+{% block content %}
+    <center>
+  <h2>Log in</h2>
+  <form class="mid-form" action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}<br>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+    <div class="g-recaptcha" data-sitekey={{ data_site_key }}></div>
+    <input class="w3-button w3-dark-grey" type="submit" value="Log in">
+    <small class="text-muted">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </small>
+  </form>
+    </center>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Trip Helpmate | Your gallery {% endblock %}
+
+{% block content %}
+    <center><h2>Your photo gallery</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ add_image|crispy }}<br>
+
+        <input class="w3-button w3-dark-grey" type="submit" name="upload_pics" value="Upload photos">
+        <button class="w3-button w3-dark-grey" onclick='goBack()'>Back</button>
+    </form><br>
+    </center>
+    <div class="container">
+    {% if images %}
+        <div class="row">
+        <center>
+            {% for img in images %}
+                <div class="img-gallery">
+                    <a class="picture" href="{{ img.picture.url }}"><img src="{{img.picture.url}}" height="350"
+                                                                         width="450" alt="picture"></a>
+                    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'delete_image' img.pk %}"'>
+                        X
+                    </button>
+                </div>
+            {% endfor %}
+        </center>
+        </div>
+    {% else %}
+        <center>
+            No pictures yet. Add some!
+        </center>
+    {% endif %}
+    </div><br>
+
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}

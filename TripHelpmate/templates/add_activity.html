@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Add activities {% endblock %}
+
+{% block content %}
+    <center>
+    <form class="mid-form" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}<br>
+    <input class="w3-button w3-dark-grey" type="submit" value="Add">
+    </form>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'activities-list' %}"'>Saved activities</button>
+    <button class="w3-button w3-dark-grey" onclick='goBack()'>Back</button>
+    </center>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}

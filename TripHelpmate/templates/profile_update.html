@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Edit profile {% endblock %}
+
+{% block content %}
+    <center>
+    <div>
+        <h2>Edit your profile</h2>
+    </div>
+        <form class="mid-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ data_update|crispy}}
+            {{ img_update|crispy }}<br>
+            <input class="w3-button w3-dark-grey" type="submit" value="Update">
+        </form>
+        <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'profile' %}"'>Back</button>
+    </center>
+{% endblock %}

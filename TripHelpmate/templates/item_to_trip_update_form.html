@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Update luggage {% endblock %}
+
+{% block content %}
+    <center>
+    <h2>Update luggage</h2>
+    <form class="mid-form" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="w3-button w3-dark-grey" type="submit" value="Update">
+    </form>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'trip-items-list' itemtrip.trip.pk %}"'>Back</button>
+    </center>
+{% endblock %}

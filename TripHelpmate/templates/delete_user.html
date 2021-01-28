@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Trip Helpmate | Delete account {% endblock %}
+
+{% block content %}
+    <center>
+  <h2>Delete account</h2>
+  <form class="mid-form" action="" method="post">
+    {% csrf_token %}
+      <label>Enter password to confirm account deletion</label><br>
+      <br>
+    {{ form }}<br>
+    <input class="w3-button w3-dark-grey" type="submit" value="Delete">&nbsp
+  </form>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'profile' %}"'>Decline</button><br>
+    <small class="text-muted ml-2">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </small>
+    </center>
+{% endblock %}

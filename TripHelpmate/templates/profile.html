@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Trip Helpmate | User's profile {% endblock %}
+
+{% block content %}
+    <center>
+        <h2>User profile page</h2>
+
+        <div>
+
+
+        <table class="profile-tbl">
+            <th rowspan="7">Avatar: <img src="{{ user_data.image.url }}" alt="avatar_img"></th>
+
+            <tr><th>Username: </th><td>{{ user_data.user.username }}</td></tr>
+            <tr><th>E-mail: </th><td>{{ user_data.user.email }}</td></tr>
+            <tr><th>First name: </th><td>{{ user_data.user.first_name }}</td></tr>
+            <tr><th>Last name: </th><td>{{ user_data.user.last_name }}</td></tr>
+            <tr><th>Joined at: </th><td>{{ user_data.user.date_joined }}</td></tr>
+            <tr><th>Last login: </th><td>{{ user_data.user.last_login }}</td></tr>
+        </table>
+    </div><br>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'update-profile' %}"'>Edit profile</button>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'password_reset' %}"'>Change password</button>
+    <button class="w3-button w3-dark-grey" onclick='location.href="{% url 'delete-account' %}"'>Delete account</button>
+    </center>
+{% endblock %}
