@@ -7,45 +7,76 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Airports',
+            name="Airports",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('continent', models.CharField(max_length=2)),
-                ('iso_country', models.CharField(max_length=2)),
-                ('country', models.CharField(max_length=100)),
-                ('city', models.CharField(max_length=100)),
-                ('icao_code', models.CharField(max_length=4)),
-                ('iata_code', models.CharField(max_length=3)),
-                ('coordinates', models.CharField(max_length=100, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("continent", models.CharField(max_length=2)),
+                ("iso_country", models.CharField(max_length=2)),
+                ("country", models.CharField(max_length=100)),
+                ("city", models.CharField(max_length=100)),
+                ("icao_code", models.CharField(max_length=4)),
+                ("iata_code", models.CharField(max_length=3)),
+                ("coordinates", models.CharField(max_length=100, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Luggage',
+            name="Luggage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('item', models.CharField(max_length=256)),
-                ('quantity', models.IntegerField()),
-                ('packed', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("item", models.CharField(max_length=256)),
+                ("quantity", models.IntegerField()),
+                ("packed", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='ToDoList',
+            name="ToDoList",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('activity', models.CharField(max_length=256)),
-                ('done', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("activity", models.CharField(max_length=256)),
+                ("done", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Users',
+            name="Users",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
     ]

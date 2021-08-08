@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 # from .decorators import check_recaptcha
 # from .models import *
 from .forms import *
+
 # from MyProject1.local_settings import weather_api_key, google_maps_api_key
 import requests
 
@@ -20,17 +21,19 @@ import urllib
 
 # Create your views here.
 
-weather_api_key = os.environ.get('weather_api_key')
-google_maps_api_key = os.environ.get('google_maps_api_key')
-recaptcha_key = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY')
-recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
+weather_api_key = os.environ.get("weather_api_key")
+google_maps_api_key = os.environ.get("google_maps_api_key")
+recaptcha_key = os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY")
+recaptcha_site_key = os.environ.get("RECAPTCHA_SITE_KEY")
 
 
 class AirportsAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Airports.objects.all().order_by('country', 'city')
+        qs = Airports.objects.all().order_by("country", "city")
         if self.q:
-            qs = qs.filter(city__icontains=self.q) or qs.filter(country__icontains=self.q)
+            qs = qs.filter(city__icontains=self.q) or qs.filter(
+                country__icontains=self.q
+            )
         return qs
 
 
@@ -49,10 +52,14 @@ class MainView(View):
             arrival_result = Airports.objects.get(pk=arrival.id)
 
             # current weather api implementation
-            d_api_response = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s'
-                                          % (departure_result.city, weather_api_key))
-            a_api_response = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s'
-                                          % (arrival_result.city, weather_api_key))
+            d_api_response = requests.get(
+                "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s"
+                % (departure_result.city, weather_api_key)
+            )
+            a_api_response = requests.get(
+                "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s"
+                % (arrival_result.city, weather_api_key)
+            )
             d_curr_weather = d_api_response.json()
             a_curr_weather = a_api_response.json()
 
@@ -87,84 +94,95 @@ class MainView(View):
             arrival = form.cleaned_data["arrival"]
             origin = Airports.objects.get(pk=departure.id)
             destination = Airports.objects.get(pk=arrival.id)
-            new_trip = Trip.objects.create(origin=origin, destination=destination, user=request.user)
+            new_trip = Trip.objects.create(
+                origin=origin, destination=destination, user=request.user
+            )
             new_trip.save()
-            return redirect('trips-list')
+            return redirect("trips-list")
 
 
 class SignUpView(View):
     def get(self, request):
         form = SignUpForm
         data_site_key = recaptcha_site_key
-        return render(request, 'signup.html', {"form": form, "data_site_key": data_site_key})
+        return render(
+            request, "signup.html", {"form": form, "data_site_key": data_site_key}
+        )
 
     def post(self, request):
         form = SignUpForm(request.POST)
         data_site_key = recaptcha_site_key
         if form.is_valid():
 
-            ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': recaptcha_key,
-                'response': recaptcha_response
-            }
+            """Begin reCAPTCHA validation"""
+            recaptcha_response = request.POST.get("g-recaptcha-response")
+            url = "https://www.google.com/recaptcha/api/siteverify"
+            values = {"secret": recaptcha_key, "response": recaptcha_response}
             data = urllib.parse.urlencode(values).encode()
             req = urllib.request.Request(url, data=data)
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
-            ''' End reCAPTCHA validation '''
+            """ End reCAPTCHA validation """
 
-            if result['success']:
+            if result["success"]:
                 form.save()
-                username = form.cleaned_data.get('username')
-                email = form.cleaned_data.get('email')
-                password = form.cleaned_data.get('password1')
+                username = form.cleaned_data.get("username")
+                email = form.cleaned_data.get("email")
+                password = form.cleaned_data.get("password1")
                 user = authenticate(username=username, password=password)
                 login(request, user)
-                messages.success(request, 'Your account has been created. You are now able to log in.')
-                return redirect('index')
+                messages.success(
+                    request,
+                    "Your account has been created. You are now able to log in.",
+                )
+                return redirect("index")
             else:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-                return render(request, "signup.html", {"form": form, "data_site_key": data_site_key})
+                messages.error(request, "Invalid reCAPTCHA. Please try again.")
+                return render(
+                    request,
+                    "signup.html",
+                    {"form": form, "data_site_key": data_site_key},
+                )
         else:
             form = SignUpForm()
-            messages.error(request, 'Incomplete or invalid data provided')
-        return render(request, 'signup.html', {"form": form})
+            messages.error(request, "Incomplete or invalid data provided")
+        return render(request, "signup.html", {"form": form})
 
 
 class LoginView(View):
     def get(self, request):
         form = LoginForm()
         data_site_key = recaptcha_site_key
-        return render(request, "login.html", {"form": form, "data_site_key": data_site_key})
+        return render(
+            request, "login.html", {"form": form, "data_site_key": data_site_key}
+        )
 
     def post(self, request):
         form = LoginForm(request.POST)
         data_site_key = recaptcha_site_key
         if form.is_valid():
 
-            ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': recaptcha_key,
-                'response': recaptcha_response
-            }
+            """Begin reCAPTCHA validation"""
+            recaptcha_response = request.POST.get("g-recaptcha-response")
+            url = "https://www.google.com/recaptcha/api/siteverify"
+            values = {"secret": recaptcha_key, "response": recaptcha_response}
             data = urllib.parse.urlencode(values).encode()
             req = urllib.request.Request(url, data=data)
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
-            ''' End reCAPTCHA validation '''
+            """ End reCAPTCHA validation """
 
             user = authenticate(**form.cleaned_data)
-            if user is not None and user.is_active and result['success']:
+            if user is not None and user.is_active and result["success"]:
                 login(request, user)
-            elif not result['success']:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-                return render(request, "login.html", {"form": form, "data_site_key": data_site_key})
-        return redirect('index')
+            elif not result["success"]:
+                messages.error(request, "Invalid reCAPTCHA. Please try again.")
+                return render(
+                    request,
+                    "login.html",
+                    {"form": form, "data_site_key": data_site_key},
+                )
+        return redirect("index")
 
 
 class DeleteUserView(LoginRequiredMixin, View):
@@ -175,13 +193,13 @@ class DeleteUserView(LoginRequiredMixin, View):
     def post(self, request):
         form = DeleteUserForm(request.POST)
         if form.is_valid():
-            success = request.user.check_password(request.POST['password'])
+            success = request.user.check_password(request.POST["password"])
             if success:
                 User.objects.get(username=request.user.username).delete()
-                messages.success(request, 'Deleted.')
-                return redirect('index')
+                messages.success(request, "Deleted.")
+                return redirect("index")
             else:
-                return redirect('delete-account')
+                return redirect("delete-account")
 
 
 class LogoutView(View):
@@ -193,11 +211,11 @@ class LogoutView(View):
 
 class AddItem(LoginRequiredMixin, CreateView):
     model = Item
-    fields = ['name']
-    template_name = 'add_item.html'
-    success_url = '/items_list'
+    fields = ["name"]
+    template_name = "add_item.html"
+    success_url = "/items_list"
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -208,16 +226,16 @@ class ItemDelete(LoginRequiredMixin, DeleteView):
     model = Item
     success_url = reverse_lazy("items-list")
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class ItemUpdate(LoginRequiredMixin, UpdateView):
     model = Item
-    fields = ['name']
-    template_name_suffix = '_update_form'
+    fields = ["name"]
+    template_name_suffix = "_update_form"
     success_url = reverse_lazy("items-list")
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class ItemsList(LoginRequiredMixin, View):
@@ -227,9 +245,9 @@ class ItemsList(LoginRequiredMixin, View):
             ctx = {
                 "items": items,
             }
-            return render(request, 'items_list.html', ctx)
+            return render(request, "items_list.html", ctx)
         else:
-            return redirect('login')
+            return redirect("login")
 
 
 class AddItemToTrip(LoginRequiredMixin, View):
@@ -249,7 +267,9 @@ class AddItemToTrip(LoginRequiredMixin, View):
             quantity = form.cleaned_data["quantity"]
             packed = form.cleaned_data["packed"]
             trip = Trip.objects.get(pk=trip_id)
-            ItemTrip.objects.create(quantity=quantity, packed=packed, item=item, trip=trip)
+            ItemTrip.objects.create(
+                quantity=quantity, packed=packed, item=item, trip=trip
+            )
             ctx = {
                 "form": form,
                 "trip": trip,
@@ -266,29 +286,29 @@ class TripItemsList(LoginRequiredMixin, View):
                 "items": items,
                 "trips": trips,
             }
-            return render(request, 'trip_items_list.html', ctx)
+            return render(request, "trip_items_list.html", ctx)
         else:
-            return redirect('login')
+            return redirect("login")
 
 
 class ItemToTripDelete(LoginRequiredMixin, DeleteView):
     model = ItemTrip
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def get_success_url(self):
-        return reverse_lazy('trip-items-list', kwargs={'trip_id': self.object.trip.pk})
+        return reverse_lazy("trip-items-list", kwargs={"trip_id": self.object.trip.pk})
 
 
 class ItemToTripUpdate(LoginRequiredMixin, UpdateView):
     model = ItemTrip
-    fields = ['item', 'quantity', 'packed']
-    template_name = 'item_to_trip_update_form.html'
+    fields = ["item", "quantity", "packed"]
+    template_name = "item_to_trip_update_form.html"
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def get_success_url(self):
-        return reverse_lazy('trip-items-list', kwargs={'trip_id': self.object.trip.pk})
+        return reverse_lazy("trip-items-list", kwargs={"trip_id": self.object.trip.pk})
 
 
 class TripsList(LoginRequiredMixin, View):
@@ -297,23 +317,23 @@ class TripsList(LoginRequiredMixin, View):
             trips = Trip.objects.filter(user=request.user)
             return render(request, "trips_list.html", {"trips": trips})
         else:
-            return redirect('login')
+            return redirect("login")
 
 
 class TripDelete(LoginRequiredMixin, DeleteView):
     model = Trip
     success_url = reverse_lazy("trips-list")
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class TripUpdate(LoginRequiredMixin, UpdateView):
     form_class = RouteSearchForm
     queryset = Trip.objects.all()
-    template_name_suffix = '_update_form'
+    template_name_suffix = "_update_form"
     success_url = "/trips_list"
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class UserProfileView(LoginRequiredMixin, View):
@@ -338,14 +358,14 @@ class UserProfileUpdate(LoginRequiredMixin, View):
 
     def post(self, request):
         data_update = UserUpdateForm(request.POST, instance=request.user)
-        img_update = UserProfileUpdateForm(request.POST,
-                                           request.FILES,
-                                           instance=request.user.userprofile)
+        img_update = UserProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.userprofile
+        )
         if data_update.is_valid() and img_update.is_valid():
             data_update.save()
             img_update.save()
-            messages.success(request, 'Your account has been updated.')
-            return redirect('profile')
+            messages.success(request, "Your account has been updated.")
+            return redirect("profile")
 
 
 class ActivitiesList(LoginRequiredMixin, View):
@@ -355,18 +375,18 @@ class ActivitiesList(LoginRequiredMixin, View):
             ctx = {
                 "activities": activities,
             }
-            return render(request, 'activities_list.html', ctx)
+            return render(request, "activities_list.html", ctx)
         else:
-            return redirect('login')
+            return redirect("login")
 
 
 class AddActivity(CreateView, LoginRequiredMixin):
     model = ToDoList
-    fields = ['activity']
-    template_name = 'add_activity.html'
-    success_url = '/activities_list'
+    fields = ["activity"]
+    template_name = "add_activity.html"
+    success_url = "/activities_list"
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -377,16 +397,16 @@ class ActivityDelete(LoginRequiredMixin, DeleteView):
     model = ToDoList
     success_url = reverse_lazy("activities-list")
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class ActivityUpdate(LoginRequiredMixin, UpdateView):
     model = ToDoList
-    fields = ['activity']
-    template_name_suffix = '_update_form'
+    fields = ["activity"]
+    template_name_suffix = "_update_form"
     success_url = reverse_lazy("activities-list")
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
 
 class AddActivityToTrip(LoginRequiredMixin, View):
@@ -407,7 +427,9 @@ class AddActivityToTrip(LoginRequiredMixin, View):
             time = form.cleaned_data["time"]
             done = form.cleaned_data["done"]
             trip = Trip.objects.get(pk=trip_id)
-            PlanTrip.objects.create(activity=activity, date=date, time=time, done=done, trip=trip)
+            PlanTrip.objects.create(
+                activity=activity, date=date, time=time, done=done, trip=trip
+            )
             ctx = {
                 "form": form,
                 "trip": trip,
@@ -416,7 +438,7 @@ class AddActivityToTrip(LoginRequiredMixin, View):
 
     def get_from_kwargs(self):
         kwargs = super(AddActivityToTrip, self).get_from_kwargs()
-        kwargs.update({'user': self.request.user})
+        kwargs.update({"user": self.request.user})
         return kwargs
 
 
@@ -424,44 +446,48 @@ class TripActivitiesList(LoginRequiredMixin, View):
     def get(self, request, trip_id):
         if request.user.is_authenticated:
             trips = Trip.objects.get(pk=trip_id, user=request.user)
-            activities = PlanTrip.objects.filter(trip=trip_id).order_by('date', 'time')
+            activities = PlanTrip.objects.filter(trip=trip_id).order_by("date", "time")
             ctx = {
                 "activities": activities,
                 "trips": trips,
             }
-            return render(request, 'trip_activities_list.html', ctx)
+            return render(request, "trip_activities_list.html", ctx)
         else:
-            return redirect('login')
+            return redirect("login")
 
 
 class ActivityToTripDelete(LoginRequiredMixin, DeleteView):
     model = PlanTrip
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def get_success_url(self):
-        return reverse_lazy("trip-activities-list", kwargs={"trip_id": self.object.trip.pk})
+        return reverse_lazy(
+            "trip-activities-list", kwargs={"trip_id": self.object.trip.pk}
+        )
 
 
 class ActivityToTripUpdate(LoginRequiredMixin, UpdateView):
     model = PlanTrip
     form_class = ActivityToTripUpdateForm
-    template_name = 'activity_to_trip_update_form.html'
+    template_name = "activity_to_trip_update_form.html"
     # login_url = '/login/'
-    redirect_field_name = 'login'
+    redirect_field_name = "login"
 
     def get_success_url(self):
-        return reverse_lazy('trip-activities-list', kwargs={'trip_id': self.object.trip.pk})
+        return reverse_lazy(
+            "trip-activities-list", kwargs={"trip_id": self.object.trip.pk}
+        )
 
 
 class UserImgGalleryView(LoginRequiredMixin, FormView):
     form_class = AddPictureToGalleryForm
-    template_name = 'user_img_gallery.html'
-    success_url = '/img_gallery/'
+    template_name = "user_img_gallery.html"
+    success_url = "/img_gallery/"
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            images = ImgGallery.objects.filter(user=request.user).order_by('-pk')
+            images = ImgGallery.objects.filter(user=request.user).order_by("-pk")
             add_image = AddPictureToGalleryForm(instance=request.user)
             ctx = {
                 "images": images,
@@ -469,7 +495,7 @@ class UserImgGalleryView(LoginRequiredMixin, FormView):
             }
             return render(request, "user_img_gallery.html", ctx)
         else:
-            return redirect('login')
+            return redirect("login")
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -485,16 +511,18 @@ class UserImgGalleryView(LoginRequiredMixin, FormView):
 
 class DeletePicsFromGalleryView(LoginRequiredMixin, DeleteView):
     model = ImgGallery
-    template_name = 'imggallery_confirm_delete.html'
-    context_object_name = 'picture'
-    success_url = '/img_gallery/'
+    template_name = "imggallery_confirm_delete.html"
+    context_object_name = "picture"
+    success_url = "/img_gallery/"
 
 
 class ContactUsView(View):
     def get(self, request):
         form = ContactUsForm()
         data_site_key = recaptcha_site_key
-        return render(request, "contact_us.html", {"form": form, "data_site_key": data_site_key})
+        return render(
+            request, "contact_us.html", {"form": form, "data_site_key": data_site_key}
+        )
 
     def post(self, request):
         form = ContactUsForm(request.POST)
@@ -504,29 +532,35 @@ class ContactUsView(View):
             subject = form.cleaned_data["subject"]
             message = form.cleaned_data["message"]
 
-            ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': recaptcha_key,
-                'response': recaptcha_response
-            }
+            """ Begin reCAPTCHA validation """
+            recaptcha_response = request.POST.get("g-recaptcha-response")
+            url = "https://www.google.com/recaptcha/api/siteverify"
+            values = {"secret": recaptcha_key, "response": recaptcha_response}
             data = urllib.parse.urlencode(values).encode()
             req = urllib.request.Request(url, data=data)
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
-            ''' End reCAPTCHA validation '''
+            """ End reCAPTCHA validation """
 
-            if result['success']:
+            if result["success"]:
                 try:
-                    msg = EmailMessage(subject, "From: " + from_email + '\n\n' + message, from_email, [settings.EMAIL_HOST_USER])
+                    msg = EmailMessage(
+                        subject,
+                        "From: " + from_email + "\n\n" + message,
+                        from_email,
+                        [settings.EMAIL_HOST_USER],
+                    )
                     msg.send()
                 except BadHeaderError:
                     return HttpResponse("Error. Invalid header")
-                return redirect('contact-us-success')
+                return redirect("contact-us-success")
             else:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-                return render(request, "contact_us.html", {"form": form, "data_site_key": data_site_key})
+                messages.error(request, "Invalid reCAPTCHA. Please try again.")
+                return render(
+                    request,
+                    "contact_us.html",
+                    {"form": form, "data_site_key": data_site_key},
+                )
 
 
 class ContactUsSuccessView(View):

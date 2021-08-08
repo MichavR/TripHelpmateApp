@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('TripHelpmate', '0015_auto_20201018_1841'),
+        ("TripHelpmate", "0015_auto_20201018_1841"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='imggallery',
-            name='picture',
+            model_name="imggallery",
+            name="picture",
             field=models.ImageField(upload_to=TripHelpmate.models.get_upload_dir),
         ),
     ]

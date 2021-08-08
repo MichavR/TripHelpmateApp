@@ -10,43 +10,63 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('TripHelpmate', '0011_auto_20201015_1420'),
+        ("TripHelpmate", "0011_auto_20201015_1420"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='item',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="item",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AlterField(
-            model_name='itemtrip',
-            name='quantity',
-            field=models.IntegerField(default=1, validators=[django.core.validators.MaxValueValidator(100), django.core.validators.MinValueValidator(1)]),
+            model_name="itemtrip",
+            name="quantity",
+            field=models.IntegerField(
+                default=1,
+                validators=[
+                    django.core.validators.MaxValueValidator(100),
+                    django.core.validators.MinValueValidator(1),
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='itemtrip',
-            name='trip',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='TripHelpmate.trip'),
+            model_name="itemtrip",
+            name="trip",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="TripHelpmate.trip"
+            ),
         ),
         migrations.AlterField(
-            model_name='plantrip',
-            name='trip',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='TripHelpmate.trip'),
+            model_name="plantrip",
+            name="trip",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="TripHelpmate.trip"
+            ),
         ),
         migrations.AlterField(
-            model_name='todolist',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="todolist",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AlterField(
-            model_name='trip',
-            name='activity',
-            field=models.ManyToManyField(related_name='todolist', through='TripHelpmate.PlanTrip', to='TripHelpmate.ToDoList'),
+            model_name="trip",
+            name="activity",
+            field=models.ManyToManyField(
+                related_name="todolist",
+                through="TripHelpmate.PlanTrip",
+                to="TripHelpmate.ToDoList",
+            ),
         ),
         migrations.AlterField(
-            model_name='trip',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="trip",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

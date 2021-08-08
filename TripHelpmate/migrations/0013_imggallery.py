@@ -9,17 +9,40 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('TripHelpmate', '0012_auto_20201016_1839'),
+        ("TripHelpmate", "0012_auto_20201016_1839"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ImgGallery',
+            name="ImgGallery",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('picture', models.ImageField(default='default_pic.jpg', upload_to='user_pics')),
-                ('trip', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='TripHelpmate.trip')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "picture",
+                    models.ImageField(default="default_pic.jpg", upload_to="user_pics"),
+                ),
+                (
+                    "trip",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="TripHelpmate.trip",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

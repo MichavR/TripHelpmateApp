@@ -34,7 +34,7 @@ class ToDoList(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=256, verbose_name='Item name')
+    name = models.CharField(max_length=256, verbose_name="Item name")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -42,18 +42,26 @@ class Item(models.Model):
 
 
 class Trip(models.Model):
-    origin = models.ForeignKey(Airports, on_delete=models.CASCADE, related_name='origin')
-    destination = models.ForeignKey(Airports, on_delete=models.CASCADE, related_name='destination')
+    origin = models.ForeignKey(
+        Airports, on_delete=models.CASCADE, related_name="origin"
+    )
+    destination = models.ForeignKey(
+        Airports, on_delete=models.CASCADE, related_name="destination"
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ManyToManyField(Item, through='ItemTrip', related_name='item')
-    activity = models.ManyToManyField(ToDoList, through='PlanTrip', related_name='todolist')
+    item = models.ManyToManyField(Item, through="ItemTrip", related_name="item")
+    activity = models.ManyToManyField(
+        ToDoList, through="PlanTrip", related_name="todolist"
+    )
 
     def __str__(self):
         return "from %s to %s" % (self.origin, self.destination)
 
 
 class ItemTrip(models.Model):
-    quantity = models.IntegerField(default=1, validators=[MaxValueValidator(100), MinValueValidator(1)])
+    quantity = models.IntegerField(
+        default=1, validators=[MaxValueValidator(100), MinValueValidator(1)]
+    )
     packed = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
@@ -61,14 +69,14 @@ class ItemTrip(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default_img.jpg', upload_to='profile_imgs')
+    image = models.ImageField(default="default_img.jpg", upload_to="profile_imgs")
 
     def __str__(self):
-        return f'{self.user.username} profile'
+        return f"{self.user.username} profile"
 
     def create_profile(sender, **kwargs):
-        if kwargs['created']:
-            user_profile = UserProfile.objects.create(user=kwargs['instance'])
+        if kwargs["created"]:
+            user_profile = UserProfile.objects.create(user=kwargs["instance"])
 
     post_save.connect(create_profile, sender=User)
 
@@ -90,7 +98,7 @@ class PlanTrip(models.Model):
 
 
 def get_upload_dir(instance, filename):
-    return 'user_pics/%s/%s/' % (instance.user.username, filename)
+    return "user_pics/%s/%s/" % (instance.user.username, filename)
 
 
 class ImgGallery(models.Model):

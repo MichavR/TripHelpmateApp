@@ -6,20 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('TripHelpmate', '0009_auto_20201015_1346'),
+        ("TripHelpmate", "0009_auto_20201015_1346"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='plantrip',
-            name='date',
-            field=models.DateField(default='1900-01-01'),
+            model_name="plantrip",
+            name="date",
+            field=models.DateField(default="1900-01-01"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='plantrip',
-            name='time',
-            field=models.TimeField(default='00:00:00'),
+            model_name="plantrip",
+            name="time",
+            field=models.TimeField(default="00:00:00"),
             preserve_default=False,
         ),
     ]
