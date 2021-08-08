@@ -14,7 +14,7 @@ This app allows users to manage their holiday trips from checking basic informat
 organising luggage, plan trip schedule or store photos.
 
 <a name="main features"></a>
-## Main features
+## Features
 
 For every user:
 - Displaying basic airport and weather info for selected departure and arrival locations,
