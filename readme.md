@@ -2,7 +2,7 @@
 
 ## Table of contents
 * [Overview](#overview)
-* [Main features](#main features)
+* [Main features](#main_features)
 * [Preview](#preview)  
 * [Installation](#installation)
 * [Setup](#setup)
