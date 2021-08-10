@@ -135,6 +135,7 @@ python manage.py migrate
   ```bash
   python manage.py runserver
   ```
+  Application should be locally accessible at http://127.0.0.1:8000/ by default
 
 
 
