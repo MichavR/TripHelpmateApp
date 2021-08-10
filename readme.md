@@ -106,7 +106,7 @@ For Linux (Windows users should use 'set' command instead of 'export'):
   ``` 
 
 #### Install required packages
-Remember to set up virtual environment!
+**>>Remember to set up virtual environment!<<**
 
 ```bash
 pip install -r requirements.txt
@@ -122,19 +122,19 @@ python manage.py migrate
 ### Setup
 
 - Set `DEBUG` mode:\
-ON: `export DEBUG='True'`\
-or\
-OFF:`export DEBUG='False'`
+  ON: `export DEBUG='True'`\
+  or\
+  OFF:`export DEBUG='False'`
 
 - Prepopulate `Airports` model:
-```bash
-python manage.py loaddata airports.json
-```
+  ```bash
+  python manage.py loaddata airports.json
+  ```
 
 - Run the app:
-```bash
-python manage.py runserver
-```
+  ```bash
+  python manage.py runserver
+  ```
 
 
 
