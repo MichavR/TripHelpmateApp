@@ -131,6 +131,11 @@ Prepopulate `Airports` model:
 python manage.py loaddata airports.json
 ```
 
+Run the app:
+```bash
+python manage.py runserver
+```
+
 
 
 
