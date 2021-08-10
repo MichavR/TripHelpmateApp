@@ -121,17 +121,17 @@ python manage.py migrate
 <a name="setup"></a>
 ### Setup
 
-Set `DEBUG` mode:\
+- Set `DEBUG` mode:\
 ON: `export DEBUG='True'`\
 or\
 OFF:`export DEBUG='False'`
 
-Prepopulate `Airports` model:
+- Prepopulate `Airports` model:
 ```bash
 python manage.py loaddata airports.json
 ```
 
-Run the app:
+- Run the app:
 ```bash
 python manage.py runserver
 ```
