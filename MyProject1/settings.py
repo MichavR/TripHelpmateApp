@@ -161,11 +161,11 @@ LOGIN_URL = "/login/"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
 
-EMAIL_PORT = 587
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
 
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 # try:
 #     from MyProject1.local_settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
